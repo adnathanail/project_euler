@@ -15,9 +15,9 @@ inp = """75
 04 62 98 27 23 09 70 98 73 93 38 53 60 04 23"""
 matr = []
 for row in inp.split('\n'):
-    matr.append([int(x) for x in row.split(' ')])
+  matr.append([int(x) for x in row.split(' ')])
 
 for i in range(len(matr)-2,-1,-1):
-    for j in range(len(matr[i])):
-        matr[i][j] += max([matr[i+1][j],matr[i+1][j+1]])
+  for j in range(len(matr[i])):
+    matr[i][j] += max([matr[i+1][j],matr[i+1][j+1]])
 print(matr)

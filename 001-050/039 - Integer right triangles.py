@@ -24,13 +24,13 @@ limit = 1000
 triples = []
 values = []
 for a in range(1,limit+1):
-    for b in range(a+1,limit+1):
-        c = sqrt((a**2)+(b**2))
-        if c.is_integer() and not([a,b,int(c)] in triples):
-            print("a: " + str(a) + " b: " + str(b) + " c: " + str(int(c)))
-            triples.append([a,b,int(c)])
-        if (a+b+c) > limit:
-            break
+  for b in range(a+1,limit+1):
+    c = sqrt((a**2)+(b**2))
+    if c.is_integer() and not([a,b,int(c)] in triples):
+      print("a: " + str(a) + " b: " + str(b) + " c: " + str(int(c)))
+      triples.append([a,b,int(c)])
+    if (a+b+c) > limit:
+      break
 for triple in triples:
-    values.append(sum(triple))
+  values.append(sum(triple))
 print(most_common(values))

@@ -21,17 +21,17 @@ inp = """08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 matr = []
 prods = []
 for i in inp.split("\n"):
-    matr.append(i.split(" "))
+  matr.append(i.split(" "))
 for i in range(len(matr)):
-    for j in range(len(matr[i])-3):
-        prods.append(int(matr[i][j]) * int(matr[i][j+1]) * int(matr[i][j+2]) * int(matr[i][j+3]))
+  for j in range(len(matr[i])-3):
+    prods.append(int(matr[i][j]) * int(matr[i][j+1]) * int(matr[i][j+2]) * int(matr[i][j+3]))
 for i in range(len(matr)-3):
-    for j in range(len(matr[i])):
-        prods.append(int(matr[i][j]) * int(matr[i+1][j]) * int(matr[i+2][j]) * int(matr[i+3][j]))
+  for j in range(len(matr[i])):
+    prods.append(int(matr[i][j]) * int(matr[i+1][j]) * int(matr[i+2][j]) * int(matr[i+3][j]))
 for i in range(len(matr)-3):
-    for j in range(len(matr[i])-3):
-        prods.append(int(matr[i][j]) * int(matr[i+1][j+1]) * int(matr[i+2][j+2]) * int(matr[i+3][j+3]))
+  for j in range(len(matr[i])-3):
+    prods.append(int(matr[i][j]) * int(matr[i+1][j+1]) * int(matr[i+2][j+2]) * int(matr[i+3][j+3]))
 for i in range(len(matr)-3):
-    for j in range(3,len(matr[i])):
-        prods.append(int(matr[i][j]) * int(matr[i+1][j-1]) * int(matr[i+2][j-2]) * int(matr[i+3][j-3]))
+  for j in range(3,len(matr[i])):
+    prods.append(int(matr[i][j]) * int(matr[i+1][j-1]) * int(matr[i+2][j-2]) * int(matr[i+3][j-3]))
 print(max(prods))

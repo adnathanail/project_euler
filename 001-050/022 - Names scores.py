@@ -5,9 +5,9 @@ names.sort()
 scores=[]
 
 for name in names:
-    score = 0
-    for letter in name:
-        score += alphabet.index(letter.lower())+1
-    score *= names.index(name) + 1
-    scores.append(score)
+  score = 0
+  for letter in name:
+    score += alphabet.index(letter.lower())+1
+  score *= names.index(name) + 1
+  scores.append(score)
 print(sum(scores))

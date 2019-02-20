@@ -1,13 +1,12 @@
 cubes = []
 for c in range(10000):
-  cubes.append(c**3)
+  cubes.append(sorted(str(c**3)))
 
-isAnagram = lambda a, b: sorted(a) == sorted(b)
 
 for i in range(len(cubes)):
-  anagrams = [cubes[i]]
+  anagrams = [i**3]
   for j in range(i+1, len(cubes)):
-    if isAnagram(str(cubes[i]), str(cubes[j])):
-      anagrams.append(cubes[j])
+    if cubes[i] == cubes[j]:
+      anagrams.append(j**3)
   if len(anagrams) == 5:
     print(anagrams)

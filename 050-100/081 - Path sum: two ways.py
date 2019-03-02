@@ -5,22 +5,14 @@ with open(pathlib.Path(__file__).parent / '081_matrix.txt') as f:
 width = len(grid[0])
 height = len(grid)
 
-for y in range(height-1,-1,-1):
-  for x in range(width-1,-1,-1):
+for x in range(width-1,-1,-1):
+  for y in range(height-1,-1,-1):
     options = []
-    try:
+    if (x+1) < len(grid[y]):
       options.append(grid[y][x+1])
-    except IndexError:
-      pass
-    try:
+    if (y+1) < len(grid):
       options.append(grid[y+1][x])
-    except IndexError:
-      pass
-    cheapest = 0
-    try:
-      cheapest = min(options)
-    except ValueError:
-      pass
+    cheapest = min(options) if len(options) > 0 else 0
     grid[y][x] = grid[y][x] + cheapest
 
 print(grid[0][0])

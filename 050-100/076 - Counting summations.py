@@ -1,4 +1,4 @@
-n = 200
+n  = 100
 
 wtm = {} # A 2-D dictionary where wtm[i][j] gives the number of ways to make i with combinations including j
 for i in range(1,n+1): # Number trying to maker

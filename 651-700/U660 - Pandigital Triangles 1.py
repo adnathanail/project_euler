@@ -12,9 +12,11 @@ def bc(n, b): # baseconvert(number, base)
     o = o[1:]
   return o
 
+sortedbases = {base:sorted(chars[:base]) for base in range(2,20)}
+
 def is_base_pandigital(n1, n2, n3, b):
   s = bc(n1, b) + bc(n2, b) + bc(n3, b)
-  return sorted(s) == sorted(chars[:b])
+  return sorted(s) == sortedbases[b]
 
 # Algorithm to generate integer-sided triangle with 1 angle of 120 degress
 # Generate numbers for side adjacent to 120 degree angle, called s1, up to arbitrary limit
@@ -27,17 +29,19 @@ def is_base_pandigital(n1, n2, n3, b):
 def is_integer(n):
   return n%1 == 0
 
-base = 10
+base = 9
 maxval = sum([i*base**i for i in range(base)])
 print(maxval)
 s1 = s2 = s3 = 1
-while s1 < 150:
-  if not(s1%100):
+while s1 < 100000:
+  if not(s1%1000):
     print(s1)
-  for s2 in range(1, s1):
+  s2 = 1
+  while s2 < s1:
     s3 = (s1**2 + s2**2 + s1*s2)**0.5
     if is_integer(s3):
       s3 = int(s3)
-      # if is_base_pandigital(s1,s2,s3,base):
-      print(s1,s2,s3)
+      if is_base_pandigital(s1,s2,s3,base):
+        print(s1,s2,s3)
+    s2 += 1
   s1 += 1

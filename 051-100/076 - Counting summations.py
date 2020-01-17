@@ -7,6 +7,6 @@ def ways_to_make(n):
       for k in range(1, min(i-j, j)+1): # j<i/2 gap between i and j is made of 1's  |  j>i/2 gap between i and j is j
         s += wtm[i-j][k]
       wtm[i][j] = s
-  return sum([wtm[n][x] for x in wtm[n]]) - 1 # -1 because 100 on its own is not a valid solution ("sum of at least TWO positive integers")
+  return sum(wtm[n][x] for x in wtm[n]) - 1 # -1 because 100 on its own is not a valid solution ("sum of at least TWO positive integers")
 
 print(ways_to_make(100))

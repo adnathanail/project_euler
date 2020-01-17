@@ -30,7 +30,7 @@ def is_integer(n):
   return n%1 == 0
 
 base = 9
-maxval = sum([i*base**i for i in range(base)])
+maxval = sum(i*base**i for i in range(base))
 print(maxval)
 s1 = s2 = s3 = 1
 while s1 < 100000:

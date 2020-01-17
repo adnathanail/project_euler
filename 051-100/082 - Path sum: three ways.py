@@ -26,4 +26,4 @@ for x in range(width-2,-1,-1):
     options = [checking_above[y], checking_below[y]]
     grid[y][x] = min(options)
 
-print(min([l[0] for l in grid]))
+print(min(l[0] for l in grid))

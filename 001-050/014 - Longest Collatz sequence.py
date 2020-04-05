@@ -11,8 +11,6 @@ def collatz(n):
 biggest = 0
 biggest_length = 0
 for i in range(1,1000000):
-	if i % 10000 == 0:
-		print(i)
 	c = collatz(i)
 	if c > biggest_length:
 		biggest = i

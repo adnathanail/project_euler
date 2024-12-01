@@ -56,3 +56,29 @@ if __name__ == "__main__":
       biggest_i = i
       biggest_i_template = template
   print(biggest_i, biggest_i_template)
+
+
+
+
+
+# class PrimeChecker:
+#     def __init__(self):
+#         self.is_prime = [False, False, True]
+#         self.current_max_prime = 2
+    
+#     def check_is_prime(self, n):
+#         if n <= self.current_max_prime:
+#             return self.is_prime[n]
+#         for i in range(self.current_max_prime + 1, n + 1):
+#             self.is_prime.append(True)
+#         for i in range(2, int(n ** 0.5) + 1):
+#             if self.is_prime[i]:
+#                 for j in range(i*i, n + 1, i):
+#                     self.is_prime[j] = False
+#         self.current_max_prime = n
+#         return self.is_prime[n]
+
+# pc = PrimeChecker()
+
+# cs = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "*"]
+# l = 1

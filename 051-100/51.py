@@ -74,7 +74,16 @@ gen = get_numbers_containing_zeroes()
 sieve = SieveOfEratosthenes()
 
 
-for i in range(10):
+current_record_num_primes = 0
+current_record_num_primes_prime = -1
+
+for i in range(200):
     template = next(gen)
+    print("\t", template)
     potential_primes = generate_nums_from_template(template)
-    print(min(potential_primes), [p for p in potential_primes if sieve.isprime(p)])
+    num_primes = len([p for p in potential_primes if sieve.isprime(p)])
+    if num_primes > current_record_num_primes:
+        current_record_num_primes = num_primes
+        current_record_num_primes_prime = min(potential_primes)
+        print(current_record_num_primes_prime, current_record_num_primes)
+    # print(min(potential_primes), len([p for p in potential_primes if sieve.isprime(p)]))

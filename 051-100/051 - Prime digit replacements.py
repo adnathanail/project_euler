@@ -18,39 +18,40 @@ def get_numbers_containing_zeroes():
     yield "08"
     yield "09"
 
-    i = 10
+    curr = 10
 
     while True:
-        istr = str(i)
-        yield istr
-        lenistr = len(istr)
+        curr_str = str(curr)
+        yield curr_str
+        len_curr_str = len(curr_str)
         # If we have only 1 0, increment the first non-zero digit starting from the right (smallest place value)
-        if istr.count("0") == 1:
-            # If we have just 1 0, then it will either be the last value, in which case we increment the second to last value
-            if istr[-1] == "0":
-                newi = i + 10
+        if curr_str.count("0") == 1:
+            # If we have just 1 0, then it will either be the last value,
+            #   in which case we increment the second to last value
+            if curr_str[-1] == "0":
+                newi = curr + 10
             # Or it will be somewhere else, and we just increment the last value
             else:
-                newi = i + 1
+                newi = curr + 1
         # Otherwise if the last digit is zero we increment that
-        elif istr[-1] == "0":
-            newi = i + 1
+        elif curr_str[-1] == "0":
+            newi = curr + 1
         # Otherwise we increment the first digit after we find a zero starting from the right (smallest place value)
         else:
-            for k in range(lenistr - 1, -1, -1):
-                if istr[k] != "0":
+            for k in range(len_curr_str - 1, -1, -1):
+                if curr_str[k] != "0":
                     break
             # Convert string index of first zero digit, to the place value of the column
             # e.g. 100,    k = 2, num_to_add = 1
             #      400334, k = 2, num_to_add = 1000
-            num_to_add = 10 ** (lenistr - k - 1)
-            newi = i + num_to_add
+            num_to_add = 10 ** (len_curr_str - k - 1)
+            newi = curr + num_to_add
         # If we cross a power of 10 boundary (e.g. 99 to 100) go through all the numbers below, with a 0 at the start
         newi_10_pow = math.floor(math.log10(newi))
-        if newi_10_pow > math.floor(math.log10(i)):
+        if newi_10_pow > math.floor(math.log10(curr)):
             for k in range(10**newi_10_pow):
                 yield f"{k}".zfill(newi_10_pow + 1)
-        i = newi
+        curr = newi
 
 
 SINGLE_DIGIT_STRINGS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]

@@ -148,8 +148,7 @@ current_record_num_primes = 0
 current_record_num_primes_prime = -1
 
 for i in range(1000000):
-    template = next(gen)
-    potential_primes = generate_nums_from_template(template)
+    potential_primes = generate_nums_from_template(next(gen))
     num_primes = len([p for p in potential_primes if sieve.isprime(p)])
     if num_primes > current_record_num_primes or (num_primes == current_record_num_primes and current_record_num_primes_prime > min(potential_primes)):
         current_record_num_primes = num_primes

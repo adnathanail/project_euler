@@ -1,3 +1,8 @@
+import math
+
+import numpy as np
+
+
 def get_numbers_containing_zeroes():
     """
     Generate all numbers containing zeroes in order.
@@ -33,6 +38,8 @@ def get_numbers_containing_zeroes():
 
 
 SINGLE_DIGIT_STRINGS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+
 def generate_nums_from_template(template):
     """
     Given a template like 1003, return the 10 possible replacements:
@@ -41,45 +48,90 @@ def generate_nums_from_template(template):
     return [int(template)] + [int(template.replace("0", i)) for i in SINGLE_DIGIT_STRINGS]
 
 
-class SieveOfEratosthenes:
+class PersistentSieve:
     """
-    Prime checker which doesn't forget its previous results, so it can be efficiently used lots of times
+    Prime number sieve that remembers and efficiently stores all previously found primes
     """
+
     def __init__(self):
-        self.primes = [True, False, True] # Using 1-indexing
-        self.current_max_prime = 2
+        # Initial small primes to bootstrap the sieve
+        self.known_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
+        self.primes_set = set(self.known_primes)
+        self.max_checked = max(self.known_primes)
+
+        # Use a compact bit array to track prime status
+        self.prime_flags = np.ones(max(self.known_primes) * 2 + 1, dtype=np.bool_)
+        self.prime_flags[0:2] = False
+
+        # Mark known composites
+        for p in self.known_primes[1:]:  # Skip 2
+            self.prime_flags[p * p::p] = False
+
+    def _extend_sieve(self, n):
+        """
+        Extend the sieve to cover numbers up to n while preserving existing information
+        """
+        if n <= self.max_checked:
+            return
+
+        # Exponential growth with a cap to prevent excessive memory use
+        new_max = min(n * 2, max(n * 1.5, self.max_checked * 2))
+        new_max = int(new_max)
+
+        # Resize prime_flags if needed
+        if new_max >= len(self.prime_flags):
+            # Create a new, larger array and copy existing flags
+            new_flags = np.ones(new_max + 1, dtype=np.bool_)
+            new_flags[:len(self.prime_flags)] = self.prime_flags
+            self.prime_flags = new_flags
+
+        # Efficient sieving
+        sqrt_max = int(math.sqrt(new_max)) + 1
+        for p in self.known_primes:
+            if p > sqrt_max:
+                break
+
+            # Start marking from the first multiple of p not already marked
+            start = max(p * p, ((self.max_checked // p) + 1) * p)
+            self.prime_flags[start:new_max + 1:p] = False
+
+        # Find and store new primes
+        new_primes = [x for x in range(self.max_checked + 1, new_max + 1)
+                      if self.prime_flags[x]]
+
+        self.known_primes.extend(new_primes)
+        self.primes_set.update(new_primes)
+        self.max_checked = new_max
 
     def isprime(self, n):
-        if n < 2:
-            return False
-        self.primes += [True for _ in range(n - self.current_max_prime)]
+        """
+        Efficiently check if a number is prime
+        """
+        # Quick checks for known primes
+        if n in self.primes_set:
+            return True
 
-        p = self.current_max_prime
-        newp = True
-        while newp:
-            for i in range(p*p, n + 1, p):
-                self.primes[i] = False
-            
-            newp = False
-            for i in range(p + 1, n):
-                if self.primes[i]:
-                    p = i
-                    newp = True
-                    break
+        # Quick composite check for known small primes
+        for p in self.known_primes:
+            if p * p > n:
+                break
+            if n % p == 0:
+                return False
 
-        return self.primes[n]
+        # Extend sieve if needed
+        self._extend_sieve(n)
+
+        return bool(self.prime_flags[n])
 
 
 gen = get_numbers_containing_zeroes()
-sieve = SieveOfEratosthenes()
-
+sieve = PersistentSieve()
 
 current_record_num_primes = 0
 current_record_num_primes_prime = -1
 
-for i in range(200):
+for i in range(1000000):
     template = next(gen)
-    print("\t", template)
     potential_primes = generate_nums_from_template(template)
     num_primes = len([p for p in potential_primes if sieve.isprime(p)])
     if num_primes > current_record_num_primes:
@@ -87,3 +139,9 @@ for i in range(200):
         current_record_num_primes_prime = min(potential_primes)
         print(current_record_num_primes_prime, current_record_num_primes)
     # print(min(potential_primes), len([p for p in potential_primes if sieve.isprime(p)]))
+
+# 10 4
+# 101 5
+# 107 6
+# 56003 7
+# 2090021 8

@@ -8,22 +8,33 @@ def get_numbers_containing_zeroes():
     Generate all numbers containing zeroes in order.
     These act as our "templates" for creating our potential prime sets
     """
+    yield "01"
+    yield "02"
+    yield "03"
+    yield "04"
+    yield "05"
+    yield "06"
+    yield "07"
+    yield "08"
+    yield "09"
+
     i = 10
 
     while True:
         istr = str(i)
+        yield istr
         lenistr = len(istr)
         # If we have only 1 0, increment the first non-zero digit starting from the right (smallest place value)
         if istr.count("0") == 1:
             # If we have just 1 0, then it will either be the last value, in which case we increment the second to last value
             if istr[-1] == "0":
-                i += 10
+                newi = i + 10
             # Or it will be somewhere else, and we just increment the last value
             else:
-                i += 1
+                newi = i + 1
         # Otherwise if the last digit is zero we increment that
         elif istr[-1] == "0":
-            i += 1
+            newi = i + 1
         # Otherwise we increment the first digit after we find a zero starting from the right (smallest place value)
         else:
             for k in range(lenistr - 1, -1, -1):
@@ -33,8 +44,13 @@ def get_numbers_containing_zeroes():
             # e.g. 100,    k = 2, num_to_add = 1
             #      400334, k = 2, num_to_add = 1000
             num_to_add = 10 ** (lenistr - k - 1)
-            i += num_to_add
-        yield istr
+            newi = i + num_to_add
+        # If we cross a power of 10 boundary (e.g. 99 to 100) go through all the numbers below, with a 0 at the start
+        newi_10_pow = math.floor(math.log10(newi))
+        if newi_10_pow > math.floor(math.log10(i)):
+            for k in range(10**newi_10_pow):
+                yield f"{k}".zfill(newi_10_pow + 1)
+        i = newi
 
 
 SINGLE_DIGIT_STRINGS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -45,7 +61,7 @@ def generate_nums_from_template(template):
     Given a template like 1003, return the 10 possible replacements:
     1003, 1113, 1223, 1333, 1443, 1553, 1663, 1773, 1883, 1993
     """
-    return [int(template)] + [int(template.replace("0", i)) for i in SINGLE_DIGIT_STRINGS]
+    return ([int(template)] if template[0] != "0" else []) + [int(template.replace("0", i)) for i in SINGLE_DIGIT_STRINGS]
 
 
 class PersistentSieve:
@@ -134,14 +150,12 @@ for i in range(1000000):
     template = next(gen)
     potential_primes = generate_nums_from_template(template)
     num_primes = len([p for p in potential_primes if sieve.isprime(p)])
-    if num_primes > current_record_num_primes:
+    if num_primes > current_record_num_primes or (num_primes == current_record_num_primes and current_record_num_primes_prime > min(potential_primes)):
         current_record_num_primes = num_primes
         current_record_num_primes_prime = min(potential_primes)
         print(current_record_num_primes_prime, current_record_num_primes)
-    # print(min(potential_primes), len([p for p in potential_primes if sieve.isprime(p)]))
 
-# 10 4
-# 101 5
-# 107 6
-# 56003 7
-# 2090021 8
+# N.B. the generate_nums_from_template function doesn't give its numbers in strictly increasing order, because on each
+#   power of 10 boundary we run through all the numbers below the next number with a 0 at the start.
+# As such, it can't just stop as soon as it finds a group of 8 primes, it needs to go the next power of 10 boundary
+# I just picked a sufficiently high enough value of i to not worry about this
